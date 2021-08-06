@@ -1,5 +1,12 @@
 import { handleRequest } from './handler'
+const PROXYPATH = 'search';
 
 addEventListener('fetch', (event) => {
-  event.respondWith(handleRequest(event.request))
-})
+        const url = new URL(event.request.url);
+        if (url.pathname.startsWith('/' + PROXYPATH + '/') || url.pathname === '/' + PROXYPATH) {
+            handleRequest(event, url);
+        } else {
+            event.respondWith(fetch(event.request));
+        }
+    }
+)
